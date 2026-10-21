@@ -1,0 +1,10 @@
+{
+  "description": "Explore a premium collection of window treatments with rich visuals and expert guidance, designed for homeowners and professional dealers seeking elegant solutions.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
