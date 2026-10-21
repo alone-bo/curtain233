@@ -1,7 +1,12 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { ArrowRight } from "./Icons";
 
-type ButtonVariant = "primary" | "secondary" | "onDark" | "quiet";
+type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "outline"
+  | "onDark"
+  | "quiet";
 
 export function Button({
   children,
@@ -14,7 +19,7 @@ export function Button({
 }) {
   return (
     <button className={`button button--${variant} ${className}`.trim()} {...props}>
-      <span>{children}</span>
+      <span className="button-content">{children}</span>
     </button>
   );
 }

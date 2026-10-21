@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
+import ChatWidget from "./components/ChatWidget";
 import Header from "./components/Header";
-import {
-  HomePage,
-  SiteFooter,
-} from "./components/HomeSections";
+import { HomePage } from "./components/HomeSections";
 import {
   CartDrawer,
   ConsultationModal,
@@ -12,6 +10,7 @@ import {
   SwatchExperience,
   type Destination,
 } from "./components/Overlays";
+import RegalFooter from "./components/RegalFooter";
 import { photos, routeFor, type DestinationGroup } from "./data";
 import { useBodyLock, useEscapeKey } from "./hooks";
 
@@ -145,7 +144,9 @@ export default function App() {
         />
       </main>
 
-      <SiteFooter onDestination={openDestination} />
+      <RegalFooter onDestination={openDestination} />
+
+      {!overlayOpen && <ChatWidget onConsult={openConsult} />}
 
       {searchOpen && (
         <SearchOverlay

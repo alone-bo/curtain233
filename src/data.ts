@@ -26,6 +26,12 @@ export const photos = {
     "https://images.unsplash.com/photo-1518019671582-55004f1bc9ab?auto=format&fit=crop&w=1200&q=88",
   fabricFold:
     "https://images.unsplash.com/photo-1518019671582-55004f1bc9ab?auto=format&fit=crop&w=1600&q=88",
+  headquarters:
+    "https://images.unsplash.com/photo-1481253127861-534498168948?auto=format&fit=crop&w=1800&q=86",
+  customPillows:
+    "https://images.unsplash.com/photo-1579656381226-5fc0f0100c3b?auto=format&fit=crop&w=1600&q=86",
+  designGuidance:
+    "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1600&q=86",
 };
 
 export type DestinationGroup =
@@ -34,7 +40,8 @@ export type DestinationGroup =
   | "Why Us"
   | "Collections"
   | "Company"
-  | "Support";
+  | "Support"
+  | "Journal";
 
 export const menuGroups = {
   window: {
