@@ -58,8 +58,10 @@ const footerColumns: {
 
 export default function RegalFooter({
   onDestination,
+  onHome,
 }: {
   onDestination: DestinationHandler;
+  onHome?: () => void;
 }) {
   return (
     <footer className="regal-footer">
@@ -68,7 +70,10 @@ export default function RegalFooter({
           <button
             type="button"
             className="regal-footer-wordmark"
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            onClick={
+              onHome ??
+              (() => window.scrollTo({ top: 0, behavior: "smooth" }))
+            }
           >
             REGAL DRAPES
           </button>

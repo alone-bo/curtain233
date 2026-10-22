@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { FormEvent } from "react";
+import { SWATCH_LIMIT, type FabricSwatch } from "../catalog";
 import {
   fabrics,
   photos,
@@ -210,10 +211,18 @@ export function SearchOverlay({
 export function CartDrawer({
   onClose,
   onExplore,
+  swatches = [],
+  onRemoveSwatch,
+  onBrowseFabrics,
 }: {
   onClose: () => void;
   onExplore: () => void;
+  swatches?: FabricSwatch[];
+  onRemoveSwatch?: (id: string) => void;
+  onBrowseFabrics?: () => void;
 }) {
+  const hasSwatches = swatches.length > 0;
+
   return (
     <div className="drawer-layer drawer-layer--cart">
       <button
@@ -229,7 +238,7 @@ export function CartDrawer({
         aria-label="Shopping cart"
       >
         <div className="drawer-topbar">
-          <Eyebrow>Shopping Bag</Eyebrow>
+          <Eyebrow>Swatch Bag</Eyebrow>
           <button
             type="button"
             className="round-close"
@@ -241,23 +250,74 @@ export function CartDrawer({
           </button>
         </div>
 
-        <div className="cart-empty">
-          <span className="cart-empty-icon">
-            <BagIcon size={30} />
-          </span>
-          <h2>Your cart is empty.</h2>
-          <p>
-            Explore made-to-measure drapery, shades, and considered soft
-            furnishings for every room.
-          </p>
-          <Button variant="primary" onClick={onExplore}>
-            EXPLORE WINDOW TREATMENTS
-          </Button>
-        </div>
+        {hasSwatches ? (
+          <div className="cart-filled">
+            <div className="cart-filled-head">
+              <h2>Your fabric swatches.</h2>
+              <p>
+                {swatches.length} of {SWATCH_LIMIT} complimentary swatches
+                selected.
+              </p>
+            </div>
+
+            <div className="cart-swatch-list">
+              {swatches.map((swatch) => (
+                <article className="cart-swatch" key={swatch.id}>
+                  <span
+                    className="cart-swatch-texture"
+                    style={{
+                      backgroundImage: `linear-gradient(${swatch.tone}, ${swatch.tone}), url("${swatch.image}")`,
+                    }}
+                  />
+                  <span className="cart-swatch-copy">
+                    <strong>{swatch.code}</strong>
+                    <span>{swatch.colorName}</span>
+                    <small>{swatch.collection}</small>
+                  </span>
+                  {onRemoveSwatch && (
+                    <button
+                      type="button"
+                      className="cart-swatch-remove"
+                      aria-label={`Remove ${swatch.code} ${swatch.colorName}`}
+                      onClick={() => onRemoveSwatch(swatch.id)}
+                    >
+                      <Close size={14} />
+                    </button>
+                  )}
+                </article>
+              ))}
+            </div>
+
+            <p className="cart-prototype-note">
+              Prototype swatch bag. No order, shipping charge or payment is
+              placed here.
+            </p>
+
+            {onBrowseFabrics && (
+              <Button variant="primary" onClick={onBrowseFabrics}>
+                CONTINUE BROWSING FABRICS
+              </Button>
+            )}
+          </div>
+        ) : (
+          <div className="cart-empty">
+            <span className="cart-empty-icon">
+              <BagIcon size={30} />
+            </span>
+            <h2>Your cart is empty.</h2>
+            <p>
+              Explore made-to-measure drapery, shades, and considered soft
+              furnishings for every room.
+            </p>
+            <Button variant="primary" onClick={onExplore}>
+              EXPLORE WINDOW TREATMENTS
+            </Button>
+          </div>
+        )}
 
         <div className="cart-note">
-          <span>Complimentary shipping</span>
-          <span>45-day perfect fit guarantee</span>
+          <span>Complimentary swatches</span>
+          <span>Choose up to {SWATCH_LIMIT} swatches</span>
         </div>
       </aside>
     </div>
@@ -401,7 +461,7 @@ export function SwatchExperience({
     setSelected((current) =>
       current.includes(name)
         ? current.filter((item) => item !== name)
-        : [...current, name].slice(0, 10),
+        : [...current, name].slice(0, SWATCH_LIMIT),
     );
   };
 
@@ -444,13 +504,13 @@ export function SwatchExperience({
             <Eyebrow>Fabrics &amp; Materials</Eyebrow>
             <h1>Order Free Fabric Swatches</h1>
             <p>
-              Get up to 10 free fabric swatches delivered straight to your door
-              to help you choose the perfect look. Select the textures and tones
-              you would like to experience in your own light.
+              Get up to {SWATCH_LIMIT} free fabric swatches delivered straight to
+              your door to help you choose the perfect look. Select the textures
+              and tones you would like to experience in your own light.
             </p>
             <div className="swatch-selection">
               <span className="swatch-count">
-                <strong>{selected.length}</strong> of 10 selected
+                <strong>{selected.length}</strong> of {SWATCH_LIMIT} selected
               </span>
               <button
                 type="button"
@@ -642,7 +702,8 @@ export function SwatchExperience({
                 REQUEST MY FREE SWATCHES
               </Button>
               <p className="form-fineprint">
-                Complimentary swatches are limited to 10 per household.
+                Complimentary swatches are limited to {SWATCH_LIMIT} per
+                household.
               </p>
             </form>
           </div>

@@ -1,4 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
+import type { FabricSwatch } from "./catalog";
+import { SWATCH_LIMIT } from "./catalog";
 import ChatWidget from "./components/ChatWidget";
 import Header from "./components/Header";
 import { HomePage } from "./components/HomeSections";
@@ -11,15 +13,24 @@ import {
   type Destination,
 } from "./components/Overlays";
 import RegalFooter from "./components/RegalFooter";
+import FabricSwatches from "./pages/FabricSwatches";
+import SoftRomanShades from "./pages/SoftRomanShades";
 import { photos, routeFor, type DestinationGroup } from "./data";
 import { useBodyLock, useEscapeKey } from "./hooks";
+import { useRouter } from "./router";
 
 export default function App() {
+  const { path, navigate } = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [swatchesOpen, setSwatchesOpen] = useState(false);
   const [consultOpen, setConsultOpen] = useState(false);
   const [destination, setDestination] = useState<Destination | null>(null);
+  const [swatchCart, setSwatchCart] = useState<FabricSwatch[]>([]);
+
+  const isProduct = path === "/soft-roman-shades";
+  const isFabrics = path === "/fabric-swatches";
+  const isHome = !isProduct && !isFabrics;
 
   const overlayOpen =
     searchOpen || cartOpen || swatchesOpen || consultOpen || Boolean(destination);
@@ -45,6 +56,22 @@ export default function App() {
     }
     if (searchOpen) setSearchOpen(false);
   });
+
+  useEffect(() => {
+    document.title = isProduct
+      ? "Soft Roman Shades | Regal Drapes"
+      : isFabrics
+        ? "Fabric Swatches | Regal Drapes"
+        : "Regal Drapes | Custom Window Treatments";
+  }, [isFabrics, isProduct]);
+
+  useEffect(() => {
+    setSearchOpen(false);
+    setCartOpen(false);
+    setSwatchesOpen(false);
+    setConsultOpen(false);
+    setDestination(null);
+  }, [path]);
 
   useEffect(() => {
     const elements = Array.from(
@@ -73,7 +100,7 @@ export default function App() {
 
     elements.forEach((element) => observer.observe(element));
     return () => observer.disconnect();
-  }, []);
+  }, [path]);
 
   const closeOthers = useCallback(() => {
     setSearchOpen(false);
@@ -116,8 +143,26 @@ export default function App() {
     [closeOthers],
   );
 
+  const toggleSwatch = useCallback((swatch: FabricSwatch) => {
+    setSwatchCart((current) => {
+      if (current.some((item) => item.id === swatch.id)) {
+        return current.filter((item) => item.id !== swatch.id);
+      }
+      if (current.length >= SWATCH_LIMIT) return current;
+      return [...current, swatch];
+    });
+  }, []);
+
+  const removeSwatch = useCallback((id: string) => {
+    setSwatchCart((current) => current.filter((item) => item.id !== id));
+  }, []);
+
   const exploreCollection = () => {
     setCartOpen(false);
+    if (!isHome) {
+      navigate("/#collections");
+      return;
+    }
     window.setTimeout(() => {
       document
         .getElementById("collections")
@@ -128,7 +173,8 @@ export default function App() {
   return (
     <>
       <Header
-        cartCount={0}
+        cartCount={swatchCart.length}
+        solid={!isHome}
         onDestination={openDestination}
         onSearch={openSearch}
         onCart={openCart}
@@ -136,15 +182,30 @@ export default function App() {
         onConsult={openConsult}
       />
 
-      <main>
-        <HomePage
-          onDestination={openDestination}
-          onSwatches={openSwatches}
-          onConsult={openConsult}
-        />
+      <main className={isHome ? undefined : "subpage-main"}>
+        {isProduct ? (
+          <SoftRomanShades
+            onDestination={openDestination}
+            onConsult={openConsult}
+          />
+        ) : isFabrics ? (
+          <FabricSwatches
+            selectedSwatches={swatchCart}
+            onToggleSwatch={toggleSwatch}
+            onOpenCart={openCart}
+            onDestination={openDestination}
+            onConsult={openConsult}
+          />
+        ) : (
+          <HomePage
+            onDestination={openDestination}
+            onSwatches={openSwatches}
+            onConsult={openConsult}
+          />
+        )}
       </main>
 
-      <RegalFooter onDestination={openDestination} />
+      <RegalFooter onDestination={openDestination} onHome={() => navigate("/")} />
 
       {!overlayOpen && <ChatWidget onConsult={openConsult} />}
 
@@ -160,6 +221,12 @@ export default function App() {
         <CartDrawer
           onClose={() => setCartOpen(false)}
           onExplore={exploreCollection}
+          swatches={swatchCart}
+          onRemoveSwatch={removeSwatch}
+          onBrowseFabrics={() => {
+            setCartOpen(false);
+            navigate("/fabric-swatches/");
+          }}
         />
       )}
 

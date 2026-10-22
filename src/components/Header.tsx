@@ -6,6 +6,7 @@ import {
   type DestinationGroup,
 } from "../data";
 import { useBodyLock, useEscapeKey, useMediaQuery } from "../hooks";
+import { useRouter } from "../router";
 import {
   AccountIcon,
   ArrowRight,
@@ -22,6 +23,7 @@ type ExplorerKey = keyof typeof menuGroups;
 
 type HeaderProps = {
   cartCount: number;
+  solid?: boolean;
   onDestination: (
     label: string,
     group?: DestinationGroup,
@@ -45,12 +47,14 @@ const standaloneGroups: Record<
 
 export default function Header({
   cartCount,
+  solid = false,
   onDestination,
   onSearch,
   onCart,
   onSwatches,
   onConsult,
 }: HeaderProps) {
+  const { path, navigate } = useRouter();
   const isMobile = useMediaQuery("(max-width: 1140px)");
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -58,7 +62,7 @@ export default function Header({
   const [mobileGroup, setMobileGroup] = useState<ExplorerKey | null>(null);
 
   const isOpen = menuOpen || mobileOpen;
-  const isTransparent = !isOpen;
+  const isTransparent = !isOpen && !solid;
 
   useBodyLock(isOpen);
   useEscapeKey(isOpen, () => {
@@ -85,7 +89,11 @@ export default function Header({
 
   const goHome = () => {
     closeNavigation();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (path === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    navigate("/");
   };
 
   const toggleMenu = () => {
@@ -98,8 +106,18 @@ export default function Header({
     }
   };
 
+  const destinationRoutes: Record<string, string> = {
+    "Soft Fabric Shades": "/soft-roman-shades/",
+    "Fabric Gallery": "/fabric-swatches/",
+  };
+
   const navigateTo = (label: string, group?: DestinationGroup, image?: string) => {
     closeNavigation();
+    const route = destinationRoutes[label];
+    if (route) {
+      navigate(route);
+      return;
+    }
     onDestination(label, group, image);
   };
 
@@ -156,7 +174,7 @@ export default function Header({
   return (
     <>
       <header
-        className={`site-header${isTransparent ? " site-header--transparent" : ""}${menuOpen ? " site-header--menu-open" : ""}`}
+        className={`site-header${isTransparent ? " site-header--transparent" : ""}${solid ? " site-header--solid" : ""}${menuOpen ? " site-header--menu-open" : ""}`}
       >
         {isMobile ? (
           <div className="header-inner header-inner--compact">
@@ -251,22 +269,20 @@ export default function Header({
                 <button
                   type="button"
                   className="primary-nav-link"
-                  onClick={() =>
-                    navigateTo(
-                      "Draperies & Side Panels",
-                      "Window Treatment",
-                      photos.drapery,
-                    )
-                  }
+                  onClick={() => {
+                    closeNavigation();
+                    navigate("/#collections");
+                  }}
                 >
                   Drapery
                 </button>
                 <button
                   type="button"
-                  className="primary-nav-link"
-                  onClick={() =>
-                    navigateTo("Roman Shades", "Collections", photos.shade)
-                  }
+                  className={`primary-nav-link${path === "/soft-roman-shades" ? " is-active" : ""}`}
+                  onClick={() => {
+                    closeNavigation();
+                    navigate("/soft-roman-shades/");
+                  }}
                 >
                   Roman Shades
                 </button>
@@ -281,10 +297,11 @@ export default function Header({
                 </button>
                 <button
                   type="button"
-                  className="primary-nav-link"
-                  onClick={() =>
-                    navigateTo("Fabric Gallery", "Collections", photos.fabricOat)
-                  }
+                  className={`primary-nav-link${path === "/fabric-swatches" ? " is-active" : ""}`}
+                  onClick={() => {
+                    closeNavigation();
+                    navigate("/fabric-swatches/");
+                  }}
                 >
                   Fabrics
                 </button>
@@ -603,6 +620,26 @@ export default function Header({
             })}
 
             <div className="mobile-direct-links">
+              <button
+                type="button"
+                onClick={() => {
+                  closeNavigation();
+                  navigate("/soft-roman-shades/");
+                }}
+              >
+                <span>Soft Roman Shades</span>
+                <ArrowRight size={16} />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  closeNavigation();
+                  navigate("/fabric-swatches/");
+                }}
+              >
+                <span>Fabric Swatches</span>
+                <ArrowRight size={16} />
+              </button>
               {standaloneLinks.map((label) => (
                 <button
                   type="button"

@@ -16,12 +16,12 @@ import {
   AffirmBar,
   AtelierSection,
   CollectionSection,
-  FinalCtaSection,
   JournalSection,
   MaterialsSection,
 } from "./RegalSections";
+import SmartBanner from "./SmartBanner";
 import { Button, Eyebrow } from "./Ui";
-
+import { useRouter } from "../router";
 type DestinationHandler = (
   label: string,
   group?: DestinationGroup,
@@ -55,33 +55,29 @@ export function HomePage({
 }: HomeSectionsProps) {
   return (
     <>
+      
       <Hero onDestination={onDestination} onSwatches={onSwatches} />
       <ValueBar />
       <AtelierSection onDestination={onDestination} />
       <CollectionSection onDestination={onDestination} />
-      <MaterialsSection
+      {/* <MaterialsSection
         onDestination={onDestination}
         onSwatches={onSwatches}
         onConsult={onConsult}
-      />
+      /> */}
       {/* <TrustBar /> */}
-      <ConsultationBanner
+      {/* <ConsultationBanner
         onConsult={onConsult}
         onDestination={onDestination}
-      />
-      <FaqSection onDestination={onDestination} />
+      /> */}
+      {/* <FaqSection onDestination={onDestination} /> */}
       {/* <WhySection /> */}
-      <JournalSection onDestination={onDestination} />
-      <FinalCtaSection
-        onDestination={onDestination}
-        onSwatches={onSwatches}
-        onConsult={onConsult}
-      />
-      <AffirmBar onDestination={onDestination} />
+      {/* <JournalSection onDestination={onDestination} /> */}
+      {/* <AffirmBar onDestination={onDestination} /> */}
+      <SmartBanner />
     </>
   );
 }
-
 function Hero({
   onDestination,
   onSwatches,
@@ -89,6 +85,8 @@ function Hero({
   onDestination: DestinationHandler;
   onSwatches: () => void;
 }) {
+  const { navigate } = useRouter();
+
   return (
     <section className="hero" aria-labelledby="hero-title">
       <div className="hero-media">
@@ -115,13 +113,7 @@ function Hero({
         <div className="hero-actions">
           <Button
             variant="primary"
-            onClick={() =>
-              onDestination(
-                "Draperies & Side Panels",
-                "Window Treatment",
-                photos.drapery,
-              )
-            }
+            onClick={() => navigate("/soft-roman-shades/")}
           >
             SHOP DRAPERY
           </Button>

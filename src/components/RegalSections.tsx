@@ -241,38 +241,7 @@ export function CollectionSection({ onDestination }: SectionProps) {
         </div>
       </div>
 
-      <div className="collection-roman" data-reveal>
-        <div className="collection-wide-image">
-          <img
-            src={photos.shade}
-            alt="Fabric window shades installed in a light-filled living room"
-            loading="lazy"
-          />
-        </div>
-        <div className="collection-row collection-row--bordered">
-          <div className="collection-row-heading">
-            <Eyebrow>SOFTNESS WITH STRUCTURE</Eyebrow>
-            <h3>Custom Roman Shades</h3>
-          </div>
-          <div className="collection-row-copy">
-            <p>
-              The texture of fabric, with a clean, architectural profile. Made
-              to your window dimensions in your choice of fabric and lining.
-            </p>
-            <Button
-              variant="outline"
-              onClick={() =>
-                onDestination("Custom Roman Shades", "Collections", photos.shade)
-              }
-            >
-              DESIGN YOUR ROMAN SHADES
-              <ArrowRight size={14} />
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="finishing-touches">
+      {/* <div className="finishing-touches">
         <div className="finishing-heading" data-reveal>
           <Eyebrow>COMPLETE THE ROOM</Eyebrow>
           <h2>The finishing touches.</h2>
@@ -388,7 +357,7 @@ export function CollectionSection({ onDestination }: SectionProps) {
         >
           Have your own fabric? Explore COM
         </button>
-      </div>
+      </div> */}
     </section>
   );
 }
@@ -631,50 +600,6 @@ export function JournalSection({ onDestination }: SectionProps) {
             </button>
           </article>
         ))}
-      </div>
-    </section>
-  );
-}
-
-export function FinalCtaSection({
-  onConsult,
-  onSwatches,
-  onDestination,
-}: MaterialsProps) {
-  return (
-    <section className="final-cta">
-      <div className="final-cta-inner" data-reveal>
-        <Eyebrow>MADE FOR YOUR HOME. MADE BY REGAL DRAPES.</Eyebrow>
-        <h2>
-          The room you imagine.
-          <br />
-          The craftsmanship it deserves.
-        </h2>
-        <p>
-          Begin with the fabric. Or begin with a conversation. We will help you
-          make it your own.
-        </p>
-        <div className="final-cta-actions">
-          <Button variant="primary" onClick={onConsult}>
-            BOOK A DESIGN CONSULTATION
-          </Button>
-          <Button variant="outline" onClick={onSwatches}>
-            ORDER COMPLIMENTARY SAMPLES
-          </Button>
-        </div>
-        <span className="final-cta-note">
-          Complimentary, one-to-one design guidance.
-        </span>
-        <button
-          type="button"
-          className="final-cta-link"
-          onClick={() =>
-            onDestination("Design Online", "Collections", photos.drapery)
-          }
-        >
-          Or create your custom design online
-          <ArrowRight size={15} />
-        </button>
       </div>
     </section>
   );

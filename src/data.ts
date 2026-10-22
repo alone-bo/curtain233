@@ -32,6 +32,15 @@ export const photos = {
     "https://images.unsplash.com/photo-1579656381226-5fc0f0100c3b?auto=format&fit=crop&w=1600&q=86",
   designGuidance:
     "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1600&q=86",
+  smartPhone: "/smart-phone-hand.jpg",
+  livingRoom:
+    "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1800",
+  diningRoom:
+    "https://images.pexels.com/photos/6588591/pexels-photo-6588591.jpeg?auto=compress&cs=tinysrgb&w=1600",
+  wovenShades:
+    "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg?auto=compress&cs=tinysrgb&w=1600",
+  romanRoom:
+    "https://images.pexels.com/photos/10267719/pexels-photo-10267719.jpeg?auto=compress&cs=tinysrgb&w=1800",
 };
 
 export type DestinationGroup =
@@ -250,7 +259,7 @@ export const faqs = [
   {
     question: "Can I order fabric samples before purchasing?",
     answer:
-      "Yes. We offer up to ten complimentary fabric swatches so you can experience the color, weight, and texture of our materials in your own light before ordering.",
+      "Yes. We offer up to five complimentary fabric swatches so you can experience the color, weight, and texture of our materials in your own light before ordering.",
   },
   {
     question: "What is your return and guarantee policy?",
